@@ -1,67 +1,60 @@
 import math
-def tokenizar(strings, separadores, stopwords):
-    strings = [i.lower() for i in strings]
-    temp = []
-    for i in range(len(strings)):
-        temp.append([])
-        str_ = ''
-        for char in strings[i]:
-            if(char in separadores):
-                if(len(str_)>0 and (str_ not in stopwords)):
-                    temp[i].append(str_)
-                str_= ''
-            else:
-                str_+=char
-        if(len(str_)>0 and (str_ not in stopwords)):
-            temp[i].append(str_)
+import filtro
 
-    return temp
+def print_tf_idf(Mtf_idf, termos):
+    temp = "      "
+    for i in termos:
+        temp +=  str(i + "      ")[:9]
+    print(temp)
 
-def count_termos(M):
-    temp = []
-    for doc in M:
-        for token in doc:
-            if(token not in temp):
-                temp.append(token)
-    return len(temp), temp
+    for i in range(len(Mtf_idf)):
+        temp = "doc" +str(i)[:3] +  ": "
+        for j in range(len(Mtf_idf[i])):
+            temp += str(str(Mtf_idf[i][j])[:5] + "               "  )[:9]
+        print(temp)
 
 def tf_idf(M, stopwords, q, separadores):
-    M = tokenizar(M, separadores, stopwords)
-    q = tokenizar([q], separadores, stopwords)
-    ndocs = len(M)
-    (ntermos, termos) = count_termos(M)
-    incidencias = [[0 for i in range(ntermos)] for j in range(ndocs)]
-    for i in range(len(M)):
-        for j in range(len(M[i])):
-            incidencias[i][termos.index(M[i][j])]+=1
+    (incidencias, termos, M, q) = filtro.incidencias_termos(M, stopwords, q, separadores)
 
-    N = ndocs
-    n = [0 for x in range(ntermos)]
-    for i in range(ndocs):
-        for j in range(ntermos):
+    N = len(M)
+    n = [0 for i in range(len(termos))]
+
+
+    for i in range(len(M)):
+        for j in range(len(termos)):
             if(incidencias[i][j]>=1):
                 n[j]+=1
-    tf_idf = [[0 for i in range(ntermos)] for j in range(ndocs)]
-    for i in range(ndocs):
-        for j in range(ntermos):
+
+    Mtf_idf = [[0 for i in range(len(termos))] for j in range(len(M))]
+    for i in range(len(M)):
+        for j in range(len(termos)):
             if(incidencias[i][j]>=1):
-                tf_idf[i][j] = float((1 + incidencias[i][j])) * math.log(N/n[j], 2)
+                Mtf_idf[i][j] = float((1 + math.log(incidencias[i][j],2))) * math.log(N/n[j], 2)
     print("TF_IDF dos documentos:")
-    print(tf_idf)
 
+    print_tf_idf(Mtf_idf, termos)
+    ret1 = Mtf_idf
 
-    ndocs = len(q)
-    (ntermos, termos) = count_termos(q)
-    incidencias = [[0 for i in range(ntermos)] for j in range(ndocs)]
-
+    incidencias_consulta = [0 for i in range(len(termos))]
     for i in range(len(q)):
-        for j in range(len(q[i])):
-            incidencias[i][termos.index(q[i][j])]+=1
+        incidencias_consulta[termos.index(q[i])]+=1
 
-    tf_idf = [[0 for i in range(ntermos)] for j in range(ndocs)]
-    for i in range(ndocs):
-        for j in range(ntermos):
-            if(incidencias[i][j]>=1):
-                tf_idf[i][j] = float((1 + incidencias[i][j])) * math.log(N/n[j], 2)
+    Mtf_idf = [0 for i in range(len(termos))]
+    for i in range(len(termos)):
+        if(incidencias_consulta[i]>=1):
+            Mtf_idf[i] = float((1 + math.log(incidencias_consulta[i],2))) * math.log(N/n[i], 2)
     print("TF_IDF da consulta:")
-    print(tf_idf)
+    print_tf_idf([Mtf_idf], termos)
+    ret2 = Mtf_idf
+    return (ret1, ret2)
+
+
+M=['O peã e o caval são pec de xadrez. O caval é o melhor do jog.',
+'A jog envolv a torr, o peã e o rei.',
+'O peã lac o boi',
+'Caval de rodei!',
+'Polic o jog no xadrez.']
+stopwords=['a', 'o', 'e', 'é', 'de', 'do', 'no', 'são']
+q='xadrez peã caval torr'
+separadores=[' ',',','.','!','?']
+tf_idf(M, stopwords, q, separadores)
