@@ -2,6 +2,7 @@ import math
 import filtro
 
 def print_tf_idf(Mtf_idf, termos):
+    return
     temp = "      "
     for i in termos:
         temp +=  str(i + "      ")[:9]
@@ -30,7 +31,7 @@ def tf_idf(M, stopwords, q, separadores, valores_extras=False):
         for j in range(len(termos)):
             if(incidencias[i][j]>=1):
                 Mtf_idf[i][j] = float((1 + math.log(incidencias[i][j],2))) * math.log(N/n[j], 2)
-    print("TF_IDF dos documentos:")
+    #print("TF_IDF dos documentos:")
 
     print_tf_idf(Mtf_idf, termos)
     ret1 = Mtf_idf
@@ -43,7 +44,7 @@ def tf_idf(M, stopwords, q, separadores, valores_extras=False):
     for i in range(len(termos)):
         if(incidencias_consulta[i]>=1):
             Mtf_idf[i] = float((1 + math.log(incidencias_consulta[i],2))) * math.log(N/n[i], 2)
-    print("TF_IDF da consulta:")
+    #print("TF_IDF da consulta:")
     print_tf_idf([Mtf_idf], termos)
     ret2 = Mtf_idf
     if(valores_extras):
@@ -67,7 +68,7 @@ def tf(M, stopwords, q, separadores, valores_extras=False):
         for j in range(len(termos)):
             if(incidencias[i][j]>=1):
                 Mtf_idf[i][j] = float((1 + math.log(incidencias[i][j],2)))
-    print("TF dos documentos:")
+    #print("TF dos documentos:")
 
     print_tf_idf(Mtf_idf, termos)
     ret1 = Mtf_idf
@@ -79,8 +80,8 @@ def tf(M, stopwords, q, separadores, valores_extras=False):
     Mtf_idf = [0 for i in range(len(termos))]
     for i in range(len(termos)):
         if(incidencias_consulta[i]>=1):
-            Mtf_idf[i] = float((1 + math.log(incidencias_consulta[i],2))) 
-    print("TF da consulta:")
+            Mtf_idf[i] = float((1 + math.log(incidencias_consulta[i],2)))
+    #print("TF da consulta:")
     print_tf_idf([Mtf_idf], termos)
     ret2 = Mtf_idf
     if(valores_extras):

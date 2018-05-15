@@ -24,9 +24,18 @@ def modelo_BM25(ponderada_docs, ponderada_consulta, incidencias, n, k1, b):
                 resultado += beta[i][j] * math.log( (ndocs-n[j]+0.5)/(n[j]+0.5) , 2)
         rank.append(resultado)
     return rank
-M=['O peã e o caval são pec de xadrez. O caval é o melhor do jog.', 'A jog envolv a torr, o peã e o rei.','O peã lac o boi','Caval de rodei!','Polic o jog no xadrez.']
-stopwords=['a', 'o', 'e', 'é', 'de', 'do', 'no', 'são']
-q='xadrez peã caval torr'
-separadores=[' ',',','.','!','?']
-(ponderada_docs, ponderada_consulta, incidencias, n) = tf_idf.tf(M, stopwords, q, separadores, True)
-print(modelo_BM25(ponderada_docs, ponderada_consulta, incidencias, n, 1, 0.75))
+#M=['O peã e o caval são pec de xadrez. O caval é o melhor do jog.', 'A jog envolv a torr, o peã e o rei.','O peã lac o boi','Caval de rodei!','Polic o jog no xadrez.']
+#stopwords=['a', 'o', 'e', 'é', 'de', 'do', 'no', 'são']
+#q='xadrez peã caval torr'
+#separadores=[' ',',','.','!','?']
+#(ponderada_docs, ponderada_consulta, incidencias, n) = tf_idf.tf(M, stopwords, q, separadores, True)
+#print(modelo_BM25(ponderada_docs, ponderada_consulta, incidencias, n, 1, 0.75))
+
+
+def getConsultapadrao():
+    M=['O peã e o caval são pec de xadrez. O caval é o melhor do jog.', 'A jog envolv a torr, o peã e o rei.','O peã lac o boi','Caval de rodei!','Polic o jog no xadrez.']
+    stopwords=['a', 'o', 'e', 'é', 'de', 'do', 'no', 'são']
+    q='xadrez peã caval torr'
+    separadores=[' ',',','.','!','?']
+    (ponderada_docs, ponderada_consulta, incidencias, n) = tf_idf.tf(M, stopwords, q, separadores, True)
+    return modelo_BM25(ponderada_docs, ponderada_consulta, incidencias, n, 1, 0.75)
